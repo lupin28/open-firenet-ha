@@ -139,6 +139,34 @@
       },
       "uptime_seconds": {
         "name": "Uptime"
+      },
+      "air_flaps_percent": {
+        "name": "Air Flaps"
+      },
+      "air_flaps_target_percent": {
+        "name": "Air Flaps Target"
+      },
+      "error_code": {
+        "name": "Error Code"
+      },
+      "error_sub": {
+        "name": "Error Sub-code"
+      },
+      "warning_code": {
+        "name": "Warning Code"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "external_temperature_sensor": "External temperature sensor"
+        },
+        "data_description": {
+          "external_temperature_sensor": "Optional. A Home Assistant temperature sensor shown as the climate entity's current temperature instead of the stove's own sensor (useful without a RIKA room sensor). Display only: the stove keeps regulating on its own sensor."
+        }
       }
     }
   }

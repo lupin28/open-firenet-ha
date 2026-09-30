@@ -139,6 +139,34 @@
       },
       "uptime_seconds": {
         "name": "Betriebszeit"
+      },
+      "air_flaps_percent": {
+        "name": "Luftklappen"
+      },
+      "air_flaps_target_percent": {
+        "name": "Luftklappen Sollwert"
+      },
+      "error_code": {
+        "name": "Fehlercode"
+      },
+      "error_sub": {
+        "name": "Fehler-Untercode"
+      },
+      "warning_code": {
+        "name": "Warncode"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen",
+        "data": {
+          "external_temperature_sensor": "Externer Temperatursensor"
+        },
+        "data_description": {
+          "external_temperature_sensor": "Optional. Ein Home-Assistant-Temperatursensor, der als aktuelle Temperatur der Klima-Entität anstelle des Ofensensors angezeigt wird (nützlich ohne RIKA-Raumsensor). Nur Anzeige: Der Ofen regelt weiterhin über seinen eigenen Sensor."
+        }
       }
     }
   }

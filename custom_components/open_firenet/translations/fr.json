@@ -139,6 +139,34 @@
       },
       "uptime_seconds": {
         "name": "Temps de fonctionnement"
+      },
+      "air_flaps_percent": {
+        "name": "Volets d'air"
+      },
+      "air_flaps_target_percent": {
+        "name": "Consigne volets d'air"
+      },
+      "error_code": {
+        "name": "Code d'erreur"
+      },
+      "error_sub": {
+        "name": "Sous-code d'erreur"
+      },
+      "warning_code": {
+        "name": "Code d'avertissement"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "external_temperature_sensor": "Sonde de température externe"
+        },
+        "data_description": {
+          "external_temperature_sensor": "Facultatif. Une sonde de température Home Assistant affichée comme température actuelle de l'entité climat, à la place de la sonde du poêle (utile sans sonde d'ambiance RIKA). Affichage uniquement : le poêle continue de réguler sur sa propre sonde."
+        }
       }
     }
   }

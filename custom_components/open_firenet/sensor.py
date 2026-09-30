@@ -11,12 +11,14 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
+    PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfMass,
     UnitOfTemperature,
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -27,6 +29,23 @@ from .coordinator import OpenFirenetCoordinator
 @dataclass(frozen=True, kw_only=True)
 class OpenFirenetSensorEntityDescription(SensorEntityDescription):
     value_fn: Callable[[dict[str, Any]], Any]
+    # Only create the entity when the bridge reports a value for it (e.g. air flaps, which not every stove has).
+    optional: bool = False
+
+
+# Without a RIKA room sensor the stove reports its "no sensor" constant (raw 1024 -> 102.4 degC). Newer bridge
+# firmware publishes null and room_sensor_connected=false; 102.4 is also filtered for older firmware.
+NO_ROOM_SENSOR_VALUE = 102.4
+
+
+def room_temperature(data: dict[str, Any]) -> float | None:
+    sensors = data.get("sensors", {})
+    if sensors.get("room_sensor_connected") is False:
+        return None
+    value = sensors.get("room_temperature")
+    if value is None or abs(float(value) - NO_ROOM_SENSOR_VALUE) < 0.05:
+        return None
+    return float(value)
 
 
 SENSOR_TYPES: tuple[OpenFirenetSensorEntityDescription, ...] = (
@@ -36,7 +55,7 @@ SENSOR_TYPES: tuple[OpenFirenetSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda data: data.get("sensors", {}).get("room_temperature"),
+        value_fn=room_temperature,
     ),
     OpenFirenetSensorEntityDescription(
         key="combustion_temperature",
@@ -90,6 +109,43 @@ SENSOR_TYPES: tuple[OpenFirenetSensorEntityDescription, ...] = (
         value_fn=lambda data: data.get("sensors", {}).get("auger_speed_rpm"),
     ),
     OpenFirenetSensorEntityDescription(
+        key="air_flaps_percent",
+        name="Air Flaps",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        optional=True,
+        value_fn=lambda data: data.get("sensors", {}).get("air_flaps_percent"),
+    ),
+    OpenFirenetSensorEntityDescription(
+        key="air_flaps_target_percent",
+        name="Air Flaps Target",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        optional=True,
+        value_fn=lambda data: data.get("sensors", {}).get("air_flaps_target_percent"),
+    ),
+    OpenFirenetSensorEntityDescription(
+        key="error_code",
+        name="Error Code",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: data.get("stove", {}).get("error_code"),
+    ),
+    OpenFirenetSensorEntityDescription(
+        key="error_sub",
+        name="Error Sub-code",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: data.get("stove", {}).get("error_sub"),
+    ),
+    OpenFirenetSensorEntityDescription(
+        key="warning_code",
+        name="Warning Code",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        optional=True,
+        value_fn=lambda data: data.get("stove", {}).get("warning_code"),
+    ),
+    OpenFirenetSensorEntityDescription(
         key="stove_state",
         name="Stove State",
         value_fn=lambda data: data.get("stove", {}).get("state_label"),
@@ -123,6 +179,7 @@ async def async_setup_entry(
         [
             OpenFirenetSensor(coordinator, entry, description)
             for description in SENSOR_TYPES
+            if not description.optional or description.value_fn(coordinator.data) is not None
         ]
     )
 

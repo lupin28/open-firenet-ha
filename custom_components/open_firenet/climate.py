@@ -6,12 +6,14 @@ from homeassistant.components.climate import (
     HVACMode,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
-from homeassistant.core import HomeAssistant
+from homeassistant.const import ATTR_TEMPERATURE, STATE_UNAVAILABLE, STATE_UNKNOWN, UnitOfTemperature
+from homeassistant.core import Event, HomeAssistant, callback
+from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
+    CONF_EXTERNAL_TEMP_SENSOR,
     DOMAIN,
     HEATING_POWER_MAX,
     HEATING_POWER_MIN,
@@ -23,6 +25,7 @@ from .const import (
     get_model_name,
 )
 from .coordinator import OpenFirenetCoordinator
+from .sensor import room_temperature
 
 FAN_MODES = [f"power_{p}" for p in range(HEATING_POWER_MIN, HEATING_POWER_MAX + 1, HEATING_POWER_STEP)]
 PRESET_MODES = list(OPERATING_MODES.values())
@@ -58,6 +61,19 @@ class OpenFirenetClimate(CoordinatorEntity[OpenFirenetCoordinator], ClimateEntit
         super().__init__(coordinator)
         self._entry = entry
         self._attr_unique_id = f"{entry.entry_id}_climate"
+        self._external_sensor: str | None = entry.options.get(CONF_EXTERNAL_TEMP_SENSOR) or None
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        if self._external_sensor:
+            # refresh the displayed temperature as soon as the external sensor changes, not only at the next poll
+            self.async_on_remove(
+                async_track_state_change_event(self.hass, [self._external_sensor], self._on_external_change)
+            )
+
+    @callback
+    def _on_external_change(self, event: Event) -> None:
+        self.async_write_ha_state()
 
     @property
     def device_info(self) -> dict:
@@ -79,11 +95,16 @@ class OpenFirenetClimate(CoordinatorEntity[OpenFirenetCoordinator], ClimateEntit
 
     @property
     def current_temperature(self) -> float | None:
-        sensors = self.coordinator.data.get("sensors", {})
-        val = sensors.get("room_temperature")
-        if val is not None:
-            return float(val)
-        return None
+        # Optional external Home Assistant sensor (e.g. a stove without its RIKA room sensor). Display only: the
+        # stove keeps regulating on its own sensor, the protocol has no way to feed it an external temperature.
+        if self._external_sensor:
+            state = self.hass.states.get(self._external_sensor)
+            if state is not None and state.state not in (STATE_UNKNOWN, STATE_UNAVAILABLE):
+                try:
+                    return float(state.state)
+                except ValueError:
+                    pass
+        return room_temperature(self.coordinator.data)
 
     @property
     def target_temperature(self) -> float | None:
