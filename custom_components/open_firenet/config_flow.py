@@ -5,11 +5,13 @@ import logging
 
 import aiohttp
 import voluptuous as vol
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_HOST, CONF_SCAN_INTERVAL
+from homeassistant.core import callback
+from homeassistant.helpers import selector
 
 from .api import OpenFirenetClient
-from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
+from .const import CONF_EXTERNAL_TEMP_SENSOR, DEFAULT_SCAN_INTERVAL, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,6 +27,11 @@ STEP_SCHEMA = vol.Schema(
 
 class OpenFirenetConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
+        return OpenFirenetOptionsFlow()
 
     async def async_step_user(self, user_input=None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
@@ -59,3 +66,24 @@ class OpenFirenetConfigFlow(ConfigFlow, domain=DOMAIN):
             data_schema=STEP_SCHEMA,
             errors=errors,
         )
+
+
+class OpenFirenetOptionsFlow(OptionsFlow):
+    """Options: an optional Home Assistant temperature sensor for the climate entity's current temperature."""
+
+    async def async_step_init(self, user_input=None) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+
+        current = self.config_entry.options.get(CONF_EXTERNAL_TEMP_SENSOR)
+        schema = vol.Schema(
+            {
+                vol.Optional(
+                    CONF_EXTERNAL_TEMP_SENSOR,
+                    description={"suggested_value": current},
+                ): selector.EntitySelector(
+                    selector.EntitySelectorConfig(domain="sensor", device_class="temperature")
+                ),
+            }
+        )
+        return self.async_show_form(step_id="init", data_schema=schema)

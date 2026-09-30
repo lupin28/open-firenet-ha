@@ -4,6 +4,9 @@ DOMAIN = "open_firenet"
 
 DEFAULT_SCAN_INTERVAL = 30  # seconds
 
+# Option: a Home Assistant temperature sensor used as the climate entity's current temperature
+CONF_EXTERNAL_TEMP_SENSOR = "external_temperature_sensor"
+
 API_STATE = "/api/state"
 API_CONTROLS = "/api/controls"
 API_SCHEDULE = "/api/schedule"
