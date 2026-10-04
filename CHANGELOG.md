@@ -2,6 +2,11 @@
 
 ## Non publié
 
+## v2.4.2 (2026-10-05)
+
+### Fixes
+- The version shown by Home Assistant for the integration matches the installed release (v2.4.1 still reported 2.4.0).
+
 ## v2.4.1 (2026-10-04)
 
 ### Fixes
