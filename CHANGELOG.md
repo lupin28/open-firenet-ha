@@ -2,6 +2,8 @@
 
 ## Non publié
 
+## v2.4.1 (2026-10-04)
+
 ### Fixes
 - The name is written "Open Firenet" everywhere, as on the logo, without the hyphen: device manufacturer and default device name, messages, documentation.
 - Device info: when the bridge is not linked to the stove yet (open-firenet reports a null model and firmware version), the device shows "RIKA Unknown" and "MB ?" instead of "MB None".
