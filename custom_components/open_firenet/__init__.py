@@ -118,7 +118,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         name=device.get("name", "Open-Firenet"),
         manufacturer="Open-Firenet",
         model=f"RIKA {model_name}",
-        sw_version=f"Firmware v{device.get('version', '2.0.0')} (MB {stove.get('mainboard_version', '')})",
+        sw_version=f"Firmware v{device.get('version', '2.0.0')} (MB {stove.get('mainboard_version') or '?'})",
         configuration_url=f"http://{coordinator.host}",
     )
 

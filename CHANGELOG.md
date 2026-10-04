@@ -1,5 +1,10 @@
 # Changelog
 
+## Non publié
+
+### Fixes
+- Device info: when the bridge is not linked to the stove yet (open-firenet reports a null model and firmware version), the device shows "RIKA Unknown" and "MB ?" instead of "MB None".
+
 ## v2.4.0 (2026-09-30)
 
 ### Features
