@@ -1,6 +1,6 @@
 # Changelog
 
-## Non publié
+## v2.4.0 (2026-09-30)
 
 ### Features
 - New diagnostic sensors: error code, error sub-code and warning code.
