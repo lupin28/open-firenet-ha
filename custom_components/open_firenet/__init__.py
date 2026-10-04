@@ -60,7 +60,7 @@ def _cleanup_orphaned_entities(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
         if reg_entry.unique_id not in valid_unique_ids:
             _LOGGER.info(
-                "Removing orphaned Open-Firenet entity: %s (unique_id: %s)",
+                "Removing orphaned Open Firenet entity: %s (unique_id: %s)",
                 reg_entry.entity_id,
                 reg_entry.unique_id,
             )
@@ -68,7 +68,7 @@ def _cleanup_orphaned_entities(hass: HomeAssistant, entry: ConfigEntry) -> None:
             removed_count += 1
 
     if removed_count:
-        _LOGGER.info("Cleaned up %d orphaned Open-Firenet entities", removed_count)
+        _LOGGER.info("Cleaned up %d orphaned Open Firenet entities", removed_count)
 
     # If uptime was given a '_2' suffix due to legacy conflict, restore clean entity_id
     uptime_uid = f"{entry.entry_id}_sensor_uptime_seconds"
@@ -115,8 +115,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     device_reg.async_get_or_create(
         config_entry_id=entry.entry_id,
         identifiers={(DOMAIN, entry.entry_id)},
-        name=device.get("name", "Open-Firenet"),
-        manufacturer="Open-Firenet",
+        name=device.get("name", "Open Firenet"),
+        manufacturer="Open Firenet",
         model=f"RIKA {model_name}",
         sw_version=f"Firmware v{device.get('version', '2.0.0')} (MB {stove.get('mainboard_version') or '?'})",
         configuration_url=f"http://{coordinator.host}",

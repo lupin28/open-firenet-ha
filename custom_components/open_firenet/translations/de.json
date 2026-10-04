@@ -15,7 +15,7 @@
     },
     "error": {
       "cannot_connect": "Verbindung zum Gerät nicht möglich. Prüfe die IP-Adresse und ob das Gerät online ist.",
-      "invalid_response": "Das Gerät hat geantwortet, sieht aber nicht wie eine Open-Firenet-Bridge aus.",
+      "invalid_response": "Das Gerät hat geantwortet, sieht aber nicht wie eine Open Firenet Bridge aus.",
       "unknown": "Unerwarteter Fehler."
     },
     "abort": {

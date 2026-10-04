@@ -1,4 +1,4 @@
-"""Test fixtures: a fake Open-Firenet bridge that behaves like the ESP firmware.
+"""Test fixtures: a fake Open Firenet bridge that behaves like the ESP firmware.
 
 The real bridge exposes controls in snake_case on GET /api/state, accepts camelCase
 commands on POST /api/controls and updates its own model immediately on POST.
@@ -17,7 +17,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.open_firenet.const import DOMAIN
 
 INITIAL_STATE = {
-    "device": {"name": "Open-Firenet", "version": "2.1.0", "connected": True},
+    "device": {"name": "Open Firenet", "version": "2.1.0", "connected": True},
     "stove": {
         "state": "off",
         "state_code": 0,

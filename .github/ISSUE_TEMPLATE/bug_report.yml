@@ -34,7 +34,7 @@ body:
   - type: input
     id: bridge_version
     attributes:
-      label: Open-Firenet firmware version
+      label: Open Firenet firmware version
       description: Shown next to the title on the bridge's web page.
       placeholder: e.g. 3.2.0
     validations:
