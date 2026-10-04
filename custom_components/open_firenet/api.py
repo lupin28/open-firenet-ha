@@ -1,4 +1,4 @@
-"""HTTP client for the Open-Firenet bridge.
+"""HTTP client for the Open Firenet bridge.
 
 Extracts all HTTP concerns out of the coordinator and reuses a single,
 persistent aiohttp session (opened lazily, closed on unload) instead of

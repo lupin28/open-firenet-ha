@@ -22,7 +22,7 @@ Custom Home Assistant integration for RIKA pellet stoves controlled via the [ope
 
 ## Requirements
 
-- An ESP32 running [Open-Firenet firmware](https://github.com/openfirenet/open-firenet) (v2.0+ or v2.3.0+ for MultiAir & Schedule), connected to your RIKA stove and WiFi network.
+- An ESP32 running [Open Firenet firmware](https://github.com/openfirenet/open-firenet) (v2.0+ or v2.3.0+ for MultiAir & Schedule), connected to your RIKA stove and WiFi network.
 - Home Assistant 2024.1 or later.
 - HACS (recommended) or manual installation.
 
@@ -47,7 +47,7 @@ Copy the `custom_components/open_firenet/` directory into your Home Assistant `<
 
 1. In Home Assistant, go to **Settings** → **Devices & Services** → **Add Integration**.
 2. Search for **Open Firenet**.
-3. Enter the IP address or hostname of your Open-Firenet bridge (e.g. `192.168.1.93` or `open-firenet.local`) and the desired poll interval (default: 30 seconds).
+3. Enter the IP address or hostname of your Open Firenet bridge (e.g. `192.168.1.93` or `open-firenet.local`) and the desired poll interval (default: 30 seconds).
 
 ---
 
@@ -56,7 +56,7 @@ Copy the `custom_components/open_firenet/` directory into your Home Assistant `<
 ### Climate
 | Entity ID | Name | Description |
 |---|---|---|
-| `climate.open_firenet` | Open-Firenet | Main thermostat: target temperature (14–28°C), HVAC mode (`heat`/`off`), preset mode (`manual`, `auto`, `comfort`), heating power (30–100%) |
+| `climate.open_firenet` | Open Firenet | Main thermostat: target temperature (14–28°C), HVAC mode (`heat`/`off`), preset mode (`manual`, `auto`, `comfort`), heating power (30–100%) |
 
 ### Fan *(MultiAir models only: DOMO, PARO, PRIMO MULTIAIR, DOMO BACK, SUMO MULTIAIR, ROCO MULTIAIR)*
 | Entity ID | Name | Description |
@@ -100,14 +100,14 @@ Copy the `custom_components/open_firenet/` directory into your Home Assistant `<
 | `sensor.open_firenet_flue_draft_fan_speed` | Flue Draft Fan Speed | RPM | Exhaust draft fan speed |
 | `sensor.open_firenet_pellet_auger_speed` | Pellet Auger Speed | RPM | Auger feeder motor speed |
 | `sensor.open_firenet_stove_state` | Stove State | — | Human-readable operating state (OFF, IGNITION, BURNING, etc.) |
-| `sensor.open_firenet_wifi_signal_strength` | WiFi Signal Strength | dBm | Open-Firenet bridge RSSI |
+| `sensor.open_firenet_wifi_signal_strength` | WiFi Signal Strength | dBm | Open Firenet bridge RSSI |
 | `sensor.open_firenet_uptime` | Uptime | s | ESP32 uptime in seconds |
 
 ---
 
 ## Supported Stove Models
 
-Open-Firenet automatically identifies the stove model via mainboard query and displays the commercial model in Home Assistant device information:
+Open Firenet automatically identifies the stove model via mainboard query and displays the commercial model in Home Assistant device information:
 
 - **MultiAir supported models**: DOMO (13), PARO (17), PRIMO MULTIAIR (29), DOMO BACK (23), SUMO MULTIAIR (25), ROCO MULTIAIR (4)
 - **Natural convection models**: INDUO (1), TOPO (2), ROCO (3), ROCO RAO (5), KAPO (6), MIRO (7), COMO (8), REVO (9), INTERNO (10), FILO (11), SUMO (12), CORSO (14), INDUO II (15), REVIVO (16), LIVO (18), COMO II (19), REVO II (20), COSMO (21), SONO (22), PK E (24), CONNECT (26)

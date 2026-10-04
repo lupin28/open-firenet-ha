@@ -208,7 +208,7 @@ async def async_setup_entry(
 
 
 class OpenFirenetNumber(CoordinatorEntity[OpenFirenetCoordinator], NumberEntity):
-    """Number entity for Open-Firenet controllable ranges."""
+    """Number entity for Open Firenet controllable ranges."""
 
     entity_description: OpenFirenetNumberDescription
     _attr_has_entity_name = True
@@ -232,8 +232,8 @@ class OpenFirenetNumber(CoordinatorEntity[OpenFirenetCoordinator], NumberEntity)
         model_name = stove.get("model_name") or get_model_name(stove.get("model"))
         return {
             "identifiers": {(DOMAIN, self._entry.entry_id)},
-            "name": device.get("name", "Open-Firenet"),
-            "manufacturer": "Open-Firenet",
+            "name": device.get("name", "Open Firenet"),
+            "manufacturer": "Open Firenet",
             "model": f"RIKA {model_name}",
             "sw_version": f"Firmware v{device.get('version', '2.0.0')} (MB {stove.get('mainboard_version') or '?'})",
             "configuration_url": f"http://{self.coordinator.host}",
