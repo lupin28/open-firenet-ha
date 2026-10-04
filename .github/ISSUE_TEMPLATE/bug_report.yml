@@ -1,0 +1,72 @@
+name: Problem with the Home Assistant integration
+description: Entities unavailable, wrong values, a command not applied, setup or configuration errors...
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report. This repository is for the Home Assistant integration.
+        If the bridge's own page (`http://open-firenet.local`) does not show your stove as connected, the problem is on the bridge side: please report it in the [firmware repository](https://github.com/openfirenet/open-firenet/issues) instead.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Quick checks
+      options:
+        - label: The bridge's web page opens in my browser and shows the stove as connected.
+        - label: The integration and the bridge firmware are up to date.
+        - label: I restarted Home Assistant after installing or updating the integration.
+  - type: input
+    id: integration_version
+    attributes:
+      label: Integration version
+      description: Shown in HACS, or in Settings > Devices & services > Open Firenet.
+      placeholder: e.g. 2.4.0
+    validations:
+      required: true
+  - type: input
+    id: ha_version
+    attributes:
+      label: Home Assistant version
+      description: Settings > About.
+      placeholder: e.g. 2026.9.2
+    validations:
+      required: true
+  - type: input
+    id: bridge_version
+    attributes:
+      label: Open-Firenet firmware version
+      description: Shown next to the title on the bridge's web page.
+      placeholder: e.g. 3.2.0
+    validations:
+      required: true
+  - type: input
+    id: stove
+    attributes:
+      label: Stove model and firmware version
+      placeholder: e.g. DOMO 2.29
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installed with
+      options:
+        - HACS
+        - Manual copy
+  - type: textarea
+    id: what_happens
+    attributes:
+      label: What happens
+      description: What you did, what you expected, and what happened instead. Name the entities concerned.
+    validations:
+      required: true
+  - type: textarea
+    id: ha_log
+    attributes:
+      label: Home Assistant log
+      description: Settings > System > Logs, search for `open_firenet`, and paste the lines (or the full error with its traceback).
+      render: text
+  - type: textarea
+    id: state
+    attributes:
+      label: Output of /api/state
+      description: Open `http://open-firenet.local/api/state` (or the bridge's IP address) and paste the text. It contains your Wi-Fi name and the bridge's addresses; remove them if you prefer.
+      render: json

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Home Assistant setup guide
+    url: https://openfirenet.github.io/home-assistant.html
+    about: Installation with HACS, adding the stove, the entities, and the external temperature sensor option.
+  - name: Bridge and stove link problems
+    url: https://github.com/openfirenet/open-firenet/issues
+    about: If the bridge's own web page does not show the stove as connected, report it in the firmware repository.
+  - name: Troubleshooting guide
+    url: https://openfirenet.github.io/troubleshooting.html
+    about: The most common problems and what to check first.
