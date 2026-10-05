@@ -1,0 +1,42 @@
+name: Release
+
+# A pushed version tag (scripts/release.sh) creates the GitHub release as a draft, with the notes of that version's
+# section of CHANGELOG.md. The title and the notes are reviewed by hand, then the release is published from the
+# GitHub page: HACS only sees published releases.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check that manifest.json carries the version of the tag
+        run: |
+          version="$(python3 -c "import json; print(json.load(open('custom_components/open_firenet/manifest.json'))['version'])")"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::manifest.json says $version but the tag is $GITHUB_REF_NAME. Use scripts/release.sh to create a release."
+            exit 1
+          fi
+
+      - name: Extract the notes of this version from CHANGELOG.md
+        run: |
+          awk -v tag="$GITHUB_REF_NAME" 'index($0, "## " tag " ") == 1 {f = 1; next} /^## / {f = 0} f' CHANGELOG.md > notes.md
+          if ! grep -q '[^[:space:]]' notes.md; then
+            echo "::error::CHANGELOG.md has no section for $GITHUB_REF_NAME."
+            exit 1
+          fi
+          cat notes.md
+
+      - name: Create the draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body_path: notes.md
+          draft: true
